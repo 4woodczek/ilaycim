@@ -38,20 +38,20 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        /* Custom Scrollbar for Dark Mode */
+        /* Özel Kaydırma Çubuğu */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
-        /* Modal Animation */
+        /* Modal Animasyonu */
         .modal-active { opacity: 1; transform: scale(1); transition: all 0.2s ease-out; }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-8 font-sans overflow-x-hidden">
 
     <div class="max-w-5xl mx-auto">
-        <!-- Header Section -->
+        <!-- Başlık Bölümü -->
         <div class="glass-card rounded-3xl p-6 mb-8 sticky top-4 z-10 shadow-2xl">
             <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <!-- Progress Bar -->
+            <!-- İlerleme Çubuğu -->
             <div class="mt-8">
                 <div class="flex justify-between text-xs mb-2 text-slate-300 font-semibold uppercase tracking-tighter">
                     <span id="progress-percent" class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">%0 Tamamlandı</span>
@@ -73,29 +73,44 @@
                 <div class="w-full bg-slate-900/50 rounded-full h-5 overflow-hidden border border-white/5 p-1">
                     <div id="progress-fill" class="progress-bar bg-gradient-to-r from-emerald-600 to-teal-400 h-full rounded-full w-0 shadow-[0_0_15px_rgba(16,185,129,0.4)]"></div>
                 </div>
-                <!-- Son İşlem Tarihi Alanı -->
+                <!-- Son İşlem Tarihi -->
                 <div id="last-action-container" class="mt-3 text-center text-[10px] text-slate-500 font-bold uppercase tracking-widest hidden">
                     🕒 SON İŞLEM: <span id="last-action-date" class="text-slate-300">--/--/---- --:--</span>
                 </div>
             </div>
         </div>
 
-        <!-- BAŞLIK ALANI -->
-        <div class="mb-10 text-center">
-            <div class="inline-block bg-white/5 backdrop-blur-md px-12 py-5 rounded-2xl border border-white/10 shadow-inner">
-                <h2 class="text-2xl md:text-3xl font-black text-emerald-50 tracking-widest uppercase">
-                    ✨ HEDEF TAHTASI ✨
-                </h2>
+        <!-- Bilgi Kartları -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+            <div class="flex items-center gap-2 bg-blue-900/20 border border-blue-500/30 px-4 py-2 rounded-full shadow-lg">
+                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                <span class="text-xs font-bold text-blue-300">50₺</span>
+            </div>
+            <div class="flex items-center gap-2 bg-indigo-900/20 border border-indigo-500/30 px-4 py-2 rounded-full shadow-lg">
+                <div class="w-3 h-3 rounded-full bg-indigo-500"></div>
+                <span class="text-xs font-bold text-indigo-300">100₺</span>
+            </div>
+            <div class="flex items-center gap-2 bg-purple-900/20 border border-purple-500/30 px-4 py-2 rounded-full shadow-lg">
+                <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                <span class="text-xs font-bold text-purple-300">150₺</span>
+            </div>
+            <div class="flex items-center gap-2 bg-pink-900/20 border border-pink-500/30 px-4 py-2 rounded-full shadow-lg">
+                <div class="w-3 h-3 rounded-full bg-pink-500"></div>
+                <span class="text-xs font-bold text-pink-300">200₺</span>
+            </div>
+            <div class="flex items-center gap-2 bg-orange-900/20 border border-orange-500/30 px-4 py-2 rounded-full shadow-lg">
+                <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                <span class="text-xs font-bold text-orange-300">500₺</span>
             </div>
         </div>
 
-        <!-- Balls Grid -->
+        <!-- Toplar Izgarası -->
         <div id="balls-container" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-4 pb-24">
-            <!-- Toplar JS ile yüklenecek -->
+            <!-- JS ile doldurulacak -->
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
+    <!-- Onay Modalı -->
     <div id="modal-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden items-center justify-center p-4">
         <div id="modal-content" class="glass-card rounded-3xl shadow-2xl max-w-sm w-full p-8 transform transition-all scale-95 opacity-0 border border-white/20">
             <div class="text-center">
@@ -115,7 +130,7 @@
         </div>
     </div>
 
-    <!-- Notification Toast -->
+    <!-- Bildirim -->
     <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-emerald-500 text-slate-900 px-8 py-4 rounded-2xl shadow-2xl transition-all duration-500 opacity-0 translate-y-4 pointer-events-none z-50 font-black uppercase tracking-tight flex items-center gap-3">
         <span>🚀</span>
         <span id="toast-msg"></span>
@@ -123,6 +138,7 @@
 
     <script>
         const targetAmount = 50000;
+        // Top listesini sabit bir sırada oluşturuyoruz
         const ballValues = [
             { val: 50, count: 100, color: 'bg-blue-900/30 border-blue-500/50 text-blue-300' },   
             { val: 100, count: 100, color: 'bg-indigo-900/30 border-indigo-500/50 text-indigo-300' }, 
@@ -146,11 +162,9 @@
                 }
             });
 
-            // Fisher-Yates Shuffle
-            for (let i = allBalls.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [allBalls[i], allBalls[j]] = [allBalls[j], allBalls[i]];
-            }
+            // ÖNEMLİ: Rastgele karıştırma (shuffle) fonksiyonunu kaldırdık. 
+            // Böylece toplar her zaman aynı (50, 100, 150...) sırasıyla dizilecek.
+            // Bu sayede index numarası (örneğin 10. top) her zaman aynı değere sahip olacak.
 
             allBalls.forEach((ball, idx) => {
                 const div = document.createElement('div');
@@ -215,17 +229,18 @@
             currentPendingBall.classList.add('locked');
             lockedIndices.push(idx.toString());
             
-            // Tarih güncelleme
             const now = new Date();
             lastActionDate = now.toLocaleDateString('tr-TR') + ' ' + now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
             
             saveData();
             updateUI();
-            showToast(`${val}₺ EKLENDİ!`);
+            showToast(`${val}₺ HEDEFE EKLENDİ!`);
         }
 
         function updateUI() {
             let total = 0;
+            // Toplam hesaplanırken sadece görsel olarak kilitli olanları değil,
+            // sabit değerleri üzerinden hesaplama yapıyoruz.
             const lockedElements = document.querySelectorAll('.ball.locked');
             lockedElements.forEach(el => {
                 total += parseInt(el.dataset.value);
@@ -236,7 +251,6 @@
             document.getElementById('progress-fill').style.width = `${Math.min(percent, 100)}%`;
             document.getElementById('progress-percent').innerText = `%${Math.floor(percent)} TAMAMLANDI`;
 
-            // Tarih UI güncelleme
             const dateContainer = document.getElementById('last-action-container');
             const dateSpan = document.getElementById('last-action-date');
             if (lastActionDate) {
